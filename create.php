@@ -14,7 +14,7 @@ if($_POST){
  
         // bind the parameters
         $stmt->bindParam(':name', $_POST['name']);
-        $stmt->bindParam(':food', $_POST['food]);
+        $stmt->bindParam(':food', $_POST['food']);
         $stmt->bindParam(':confirmed', $_POST['confirmed']);
                 
         // Execute the query
