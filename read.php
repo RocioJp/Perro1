@@ -5,14 +5,14 @@
   
     </head>
 <body>
- 
+<?php 
 $action = isset($_GET['action']) ? $_GET['action'] : "";
  
 // if it was redirected from delete.php
 if($action=='deleted'){
     echo "<div>Record was deleted.</div>";
 }
-
+?>
 <!-- just a header label -->
 <h1>PDO: Read Records</h1>
  
