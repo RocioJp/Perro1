@@ -5,91 +5,78 @@
   
     </head>
 <body>
-<?php 
-$action = isset($_GET['action']) ? $_GET['action'] : "";
- 
-// if it was redirected from delete.php
-if($action=='deleted'){
-    echo "<div>Record was deleted.</div>";
-}
-?>
-<!-- just a header label -->
-<h1>PDO: Read Records</h1>
- 
 <?php
-// include database connection
-include 'config/database.php';
- 
-$action = isset($_GET['action']) ? $_GET['action'] : "";
- 
-// if it was redirected from delete.php
-if($action=='deleted'){
-    echo "<div>Record was deleted.</div>";
-}
- 
-// select all data
-$query = "SELECT id, name, food, confirmed FROM potluck";
-$stmt = $con->prepare($query);
-$stmt->execute();
- 
-// this is how to get number of rows returned
-$num = $stmt->rowCount();
- 
-// link to create record form
-echo "<div>";
-    echo "<a href='create.php'>Create New Record</a>";
-echo "</div>";
- 
-//check if more than 0 record found
-if($num>0){
- 
-    echo "<table>";//start table
+    require 'database.php';
+    $id = null;
+    if ( !empty($_GET['id'])) {
+        $id = $_REQUEST['id'];
+    }
      
-        //creating our table heading
-        echo "<tr>";
-            echo "<th>ID</th>";
-            echo "<th>Name</th>";
-            echo "<th>Food</th>";
-            echo "<th>Confirmed</th>";
-            echo "<th>Action</th>";
-        echo "</tr>";
-         
-        // retrieve our table contents
-        // fetch() is faster than fetchAll()
-        // http://stackoverflow.com/questions/2770630/pdofetchall-vs-pdofetch-in-a-loop
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-            // extract row
-            // this will make $row['firstname'] to
-            // just $firstname only
-            extract($row);
-             
-            // creating new table row per record
-            echo "<tr>";
-                echo "<td>{$id}</td>";
-                echo "<td>{$name}</td>";
-                echo "<td>{$food}</td>";
-                echo "<td>&#36;{$confirmed}</td>";
-                echo "<td>";
-                    // we will use this links on next part of this post
-                    echo "<a href='update.php?id={$id}'>Edit</a>";
-                    echo " / ";
-                    // we will use this links on next part of this post
-                    echo "<a href='#' onclick='delete_user({$id});'>Delete</a>";
-                echo "</td>";
-            echo "</tr>";
-        }
-     
-    // end table
-    echo "</table>";
-     
-}
- 
-// if no records found
-else{
-    echo "<div>No records found.</div>";
-}
+    if ( null==$id ) {
+        header("Location: index.php");
+    } else {
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "SELECT * FROM customers where id = ?";
+        $q = $pdo->prepare($sql);
+        $q->execute(array($id));
+        $data = $q->fetch(PDO::FETCH_ASSOC);
+        Database::disconnect();
+    }
 ?>
-
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link   href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/bootstrap.min.js"></script>
+</head>
+ 
+<body>
+    <div class="container">
+     
+                <div class="span10 offset1">
+                    <div class="row">
+                        <h3>Read a Customer</h3>
+                    </div>
+                     
+                    <div class="form-horizontal" >
+                      <div class="control-group">
+                        <label class="control-label">Name</label>
+                        <div class="controls">
+                            <label class="checkbox">
+                                <?php echo $data['name'];?>
+                            </label>
+                        </div>
+                      </div>
+                      <div class="control-group">
+                        <label class="control-label">Food</label>
+                        <div class="controls">
+                            <label class="checkbox">
+                                <?php echo $data['food'];?>
+                            </label>
+                        </div>
+                      </div>
+                      <div class="control-group">
+                        <label class="control-label">Confirmed</label>
+                        <div class="controls">
+                            <label class="checkbox">
+                                <?php echo $data['confirm'];?>
+                            </label>
+                        </div>
+                      </div>
+                        <div class="form-actions">
+                          <a class="btn" href="index.php">Back</a>
+                       </div>
+                     
+                      
+                    </div>
+                </div>
+                 
+    </div> <!-- /container -->
+  </body>
+</html>
 <script type='text/javascript'>
 function delete_user( id ){
      

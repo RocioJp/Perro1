@@ -7,52 +7,31 @@
 </head>
  
 <body>
- 
-<!-- just a header -->
-<h1>PDO: Create a Record</h1>
- 
-<!-- html form here where the product information will be entered -->
-<form action='create.php' method='post'>
-    <table border='0'>
-        <tr>
-            <td>Name</td>
-            <td><input type='text' name='name' /></td>
-        </tr>
-        <tr>
-            <td>Food</td>
-            <td><input type='text' name='food' /></td>
-        </tr>
-        <tr>
-            <td>Confirmed (Y o N)</td>
-             <td><input type='text' name='confirmed' /></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <input type='submit' value='Save' /> 
-                <a href='read.php'>Back to read records</a>
-            </td>
-        </tr>
-    </table>
-</form>
- 
-</body>
-                  <?php
-                   include 'database.php';
-                   $pdo = Database::connect();
-                   $sql = 'SELECT * FROM customers ORDER BY id DESC';
-                   foreach ($pdo->query($sql) as $row) {
-                            echo '<tr>';
-                            echo '<td>'. $row['name'] . '</td>';
-                            echo '<td>'. $row['email'] . '</td>';
-                            echo '<td>'. $row['mobile'] . '</td>';
-                            echo '</tr>';
-                   }
-                   Database::disconnect();
-                  ?>
-                  </tbody>
-            </table>
+    <div class="container">
+            <div class="row">
+                <h3>Index of the Perrito Chingon!</h3>
+            </div>
+            <div class="row">
+                <p>
+                    <a href="create.php" class="btn btn-success">Create</a>
+                </p>
+                <table class="table table-striped table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Food</th>
+                          <th>Confirm</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      <?php
+                       include 'database.php';
+                       ?>
+                      
+                      </tbody>
+                </table>
         </div>
-    </div> <!-- /container -->
+    </div> 
   </body>
 </html>
