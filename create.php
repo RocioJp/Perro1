@@ -51,8 +51,8 @@
          
         // keep track post values
         $name = $_POST['name'];
-        $food = $_POST['email'];
-        $confirm = $_POST['mobile'];
+        $food = $_POST['food'];
+        $confirm = $_POST['confirm'];
          
         // validate input
         $valid = true;
