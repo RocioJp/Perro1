@@ -9,7 +9,7 @@
 <body>
     <div class="container">
             <div class="row">
-                <h3>Perrito Chingon</h3>
+                <h3>Perro1</h3>
             </div>
             <div class="row">
                 <p>
