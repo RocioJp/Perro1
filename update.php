@@ -1,118 +1,120 @@
-<!DOCTYPE HTML>
-<html>
-    <head>
-        <title>Update A Record</title>
-  
-    </head>
+<?php 
+	
+	require 'database.php';
+
+	$id = null;
+	if ( !empty($_GET['id'])) {
+		$id = $_REQUEST['id'];
+	}
+	
+	if ( null==$id ) {
+		header("Location: index.php");
+	}
+	
+	if ( !empty($_POST)) {
+		// keep track validation errors
+		$nameError = null;
+		$foodError = null;
+		$confirmError = null;
+		
+		// keep track post values
+		$name = $_POST['name'];
+		$food = $_POST['food'];
+		$confirm = $_POST['confirm'];
+		
+		// validate input
+		$valid = true;
+		if (empty($name)) {
+			$nameError = 'Please enter Name';
+			$valid = false;
+		}
+		
+		if (empty($food)) {
+			$foodError = 'Please enter Food';
+			$valid = false;
+		}
+		
+		if (empty($confirm)) {
+			$confirmError = 'Please enter Confirm';
+			$valid = false;
+		}
+		
+		// update data
+		if ($valid) {
+			$pdo = Database::connect();
+			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$sql = "UPDATE customers  set name = ?, food = ?, confirm =? WHERE id = ?";
+			$q = $pdo->prepare($sql);
+			$q->execute(array($name,$food,$confirm,$id));
+			Database::disconnect();
+			header("Location: index.php");
+		}
+	} else {
+		$pdo = Database::connect();
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "SELECT * FROM customers where id = ?";
+		$q = $pdo->prepare($sql);
+		$q->execute(array($id));
+		$data = $q->fetch(PDO::FETCH_ASSOC);
+		$name = $data['name'];
+		$food = $data['food'];
+		$confirm = $data['confirm'];
+		Database::disconnect();
+	}
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link   href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/bootstrap.min.js"></script>
+</head>
+
 <body>
-
-<!-- just a header label -->
-<h1>PDO: Update a Record</h1>
- 
-<?php
-// get passed parameter value, in this case, the record ID
-// isset() is a PHP function used to verify if a value is there or not
-$id=isset($_GET['id']) ? $_GET['id'] : die('ERROR: Record ID not found.');
- 
-//include database connection
-include 'config/database.php';
- 
-// check if form was submitted
-if($_POST){
-     
-    try{
-     
-        // write update query
-        // in this case, it seemed like we have so many fields to pass and 
-        // it is better to label them and not use question marks
-        $query = "UPDATE potluck
-                    SET name=:name, food=:food, confirmed=:confirmed 
-                    WHERE id = :id";
- 
-        // prepare query for excecution
-        $stmt = $con->prepare($query);
- 
-        // bind the parameters
-        $stmt->bindParam(':name', $_POST['name']);
-        $stmt->bindParam(':food', $_POST['food']);
-        $stmt->bindParam(':confirmed', $_POST['confirmed']);
-        $stmt->bindParam(':id', $id);
-         
-        // Execute the query
-        if($stmt->execute()){
-            echo "Record was updated.";
-        }else{
-            echo 'Unable to update record. Please try again.';
-        }
-         
-    }
-     
-    // show errors
-    catch(PDOException $exception){
-        die('ERROR: ' . $exception->getMessage());
-    }
-}
-?>
- 
-<!-- just a header label -->
-<h1>PDO: Update a Record</h1>
- 
-<?php
-// get passed parameter value, in this case, the record ID
-// isset() is a PHP function used to verify if a value is there or not
-$id=isset($_GET['id']) ? $_GET['id'] : die('ERROR: Record ID not found.');
- 
-// read current record's data
-try {
-    // prepare select query
-    $query = "SELECT id, name, food, confirmed FROM potluck WHERE id = ? LIMIT 0,1";
-    $stmt = $con->prepare( $query );
-     
-    // this is the first question mark
-    $stmt->bindParam(1, $id);
-     
-    // execute our query
-    $stmt->execute();
-     
-    // store retrieved row to a variable
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-     
-    // values to fill up our form
-    $name = $row['name'];
-    $food = $row['food'];
-    $confirmed = $row['confirmed'];
-}
- 
-// show error
-catch(PDOException $exception){
-    die('ERROR: ' . $exception->getMessage());
-}
-?>
- 
-<!--we have our html form here where new user information will be entered-->
-<form action='update.php?id=<?php echo htmlspecialchars($id); ?>' method='post' border='0'>
-    <table>
-        <tr>
-            <td>Name</td>
-            <td><input type='text' name='name' value="<?php echo htmlspecialchars($name, ENT_QUOTES);  ?>" /></td>
-        </tr>
-        <tr>
-            <td>Food</td>
-            <td><input type='food' name='food' value="<?php echo htmlspecialchars($food, ENT_QUOTES);  ?>" /></td>
-        </tr>
-        <tr>
-            <td>Confirmed</td>
-            <td><input type='text' name='confirmed'  value="<?php echo htmlspecialchars($confirmed, ENT_QUOTES);  ?>" /></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <input type='submit' value='Save Changes' />
-        <a href='read.php'>Back to read records</a>
-            </td>
-        </tr>
-    </table>
-</form>
-
-</body>
+    <div class="container">
+    
+    			<div class="span10 offset1">
+    				<div class="row">
+		    			<h3>Update a Customer</h3>
+		    		</div>
+    		
+	    			<form class="form-horizontal" action="update.php?id=<?php echo $id?>" method="post">
+					  <div class="control-group <?php echo !empty($nameError)?'error':'';?>">
+					    <label class="control-label">Name</label>
+					    <div class="controls">
+					      	<input name="name" type="text"  placeholder="Name" value="<?php echo !empty($name)?$name:'';?>">
+					      	<?php if (!empty($nameError)): ?>
+					      		<span class="help-inline"><?php echo $nameError;?></span>
+					      	<?php endif; ?>
+					    </div>
+					  </div>
+					  <div class="control-group <?php echo !empty($foodError)?'error':'';?>">
+					    <label class="control-label">Food</label>
+					    <div class="controls">
+					      	<input name="food" type="text" placeholder="Food" value="<?php echo !empty($food)?$food:'';?>">
+					      	<?php if (!empty($foodError)): ?>
+					      		<span class="help-inline"><?php echo $foodError;?></span>
+					      	<?php endif;?>
+					    </div>
+					  </div>
+					  <div class="control-group <?php echo !empty($confirmError)?'error':'';?>">
+					    <label class="control-label">Confirm</label>
+					    <div class="controls">
+					      	<input name="confirm" type="text"  placeholder="confirm" value="<?php echo !empty($confirm)?$confirm:'';?>">
+					      	<?php if (!empty($confirmError)): ?>
+					      		<span class="help-inline"><?php echo $confirmError;?></span>
+					      	<?php endif;?>
+					    </div>
+					  </div>
+					  <div class="form-actions">
+						  <button type="submit" class="btn btn-success">Update</button>
+						  <a class="btn" href="index.php">Back</a>
+						</div>
+					</form>
+				</div>
+				
+    </div> <!-- /container -->
+  </body>
 </html>
