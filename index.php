@@ -9,7 +9,7 @@
 <body>
     <div class="container">
             <div class="row">
-                <h3>Index of the Perrito Chingon!</h3>
+                <h3>Perrito Chingon</h3>
             </div>
             <div class="row">
                 <p>
@@ -27,6 +27,9 @@
                       <tbody>
                       <?php
                        include 'database.php';
+                       {
+                                
+                       }
                        ?>
                       
                       </tbody>
