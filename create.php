@@ -33,12 +33,32 @@
                         </div>
                       </div>
                       <div class="control-group <?php echo !empty($confirmError)?'error':'';?>">
-                        <label class="control-label">Confirm (Y o N)</label>
+                        <label class="control-label">Precio</label>
                         <div class="controls">
-                            <input name="confirmed" type="text"  placeholder="Confirm (Y o N)" value="">
+                            <input name="precio" type="text"  placeholder="precio" value="">
                             <?php if (!empty($confirmError)): ?>
                                 <span class="help-inline"><?php echo $confirmError;?></span>
                             <?php endif;?>
+
+
+<div class="control-group <?php echo !empty($foodError)?'error':'';?>">
+                        <label class="control-label">Password</label>
+                        <div class="controls">
+                            <input name="password" type="password" placeholder="Password" value="">
+                            <?php if (!empty($foodError)): ?>
+                                <span class="help-inline"><?php echo $foodError;?></span>
+                            <?php endif;?>
+                        </div>
+                      </div>
+                        </div>
+                      </div>
+                      <div class="form-actions">
+                          <button type="submit" class="btn btn-success">Create</button>
+                          <a class="btn" href="index.php">Back</a>
+                        </div>
+                    </form>
+
+                </div>
 <div class="control-group <?php echo !empty($foodError)?'error':'';?>">
                         <label class="control-label">Password</label>
                         <div class="controls">
@@ -61,3 +81,4 @@
     </div> <!-- /container -->
   </body>
 </html>
+
