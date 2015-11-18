@@ -5,7 +5,7 @@
     <link   href="css/bootstrap.min.css" rel="stylesheet">
     <script src="js/bootstrap.min.js"></script>
 </head>
- 
+
 <body>
     <div class="container">
             <div class="row">
@@ -28,13 +28,13 @@
                       <?php
                        include 'database.php';
                        {
-                                
+
                        }
                        ?>
-                      
+
                       </tbody>
                 </table>
         </div>
-    </div> 
+    </div>
   </body>
 </html>
