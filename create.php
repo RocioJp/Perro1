@@ -39,26 +39,8 @@
                             <?php if (!empty($confirmError)): ?>
                                 <span class="help-inline"><?php echo $confirmError;?></span>
                             <?php endif;?>
+                            
 
-
-<div class="control-group <?php echo !empty($foodError)?'error':'';?>">
-                        <label class="control-label">Password</label>
-                        <div class="controls">
-                            <input name="password" type="password" placeholder="Password" value="">
-                            <?php if (!empty($foodError)): ?>
-                                <span class="help-inline"><?php echo $foodError;?></span>
-                            <?php endif;?>
-                        </div>
-                      </div>
-                        </div>
-                      </div>
-                      <div class="form-actions">
-                          <button type="submit" class="btn btn-success">Create</button>
-                          <a class="btn" href="index.php">Back</a>
-                        </div>
-                    </form>
-
-                </div>
 <div class="control-group <?php echo !empty($foodError)?'error':'';?>">
                         <label class="control-label">Password</label>
                         <div class="controls">
@@ -81,4 +63,3 @@
     </div> <!-- /container -->
   </body>
 </html>
-
